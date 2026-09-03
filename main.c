@@ -2,38 +2,42 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define NUM_SUCURSALES 25
+#define VENTA_MIN 1000
+#define VENTA_MAX 10000
+
 int main(void) {
     srand((unsigned int)time(NULL));
 
-
     clock_t inicio = clock();
 
+    // Arreglos paralelos: IDs de sucursales y sus ventas
+    int sucursales[NUM_SUCURSALES];
+    double ventas[NUM_SUCURSALES];
+    double suma_ventas = 0.0;
 
-    const int total_iteraciones = 500;
-    const int min = 50;
-    const int max = 100;
+    // Generar datos y calcular la suma total
+    for (int i = 0; i < NUM_SUCURSALES; i++) {
+        sucursales[i] = i + 1; // Sucursal 1 a 25
+        ventas[i] = VENTA_MIN + (rand() % (VENTA_MAX - VENTA_MIN + 1));
+        suma_ventas += ventas[i];
+    }
 
-    int pares = 0;
-    int impar = 0;
+    double promedio = suma_ventas / NUM_SUCURSALES;
 
-    for (int i = 0; i < total_iteraciones; i++) {
-        int numero = min + rand() % (max - min + 1);
-        if (numero % 2 == 0) {
-            pares++;
-        } else {
-            impar++;
+    clock_t fin = clock();
+    double tiempo_total = (double)(fin - inicio) / CLOCKS_PER_SEC;
+
+    // Salida por pantalla
+    printf("Promedio de ventas: $%.2f\n\n", promedio);
+    printf("Sucursales con ventas por encima del promedio:\n");
+    for (int i = 0; i < NUM_SUCURSALES; i++) {
+        if (ventas[i] > promedio) {
+            printf(" - Sucursal %2d: $%.2f\n", sucursales[i], ventas[i]);
         }
     }
 
-
-
-    clock_t fin = clock();
-
-    double tiempo_total = (double)(fin - inicio) / CLOCKS_PER_SEC;
-
-    printf("Numeros par: %d\n", pares);
-    printf("Numeros impar: %d\n", impar);
-    printf("Tiempo: %f segundos\n", tiempo_total);
+    printf("\nTiempo de ejecucion: %f segundos\n", tiempo_total);
 
     return EXIT_SUCCESS;
 }
